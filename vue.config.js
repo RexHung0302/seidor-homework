@@ -23,7 +23,7 @@ function resolve(dir) {
 }
 
 module.exports = {
-  publicPath: "./",
+  publicPath: "/seidor-homework/",
   // devServer: devServer,
   pages: {
     index: {
