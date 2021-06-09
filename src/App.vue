@@ -1,4 +1,5 @@
 <template lang="pug">
+span 123123
 router-view(
   v-cloak
 )
