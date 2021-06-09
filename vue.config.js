@@ -1,3 +1,5 @@
+const path = require("path");
+
 let devServer = {
   // 在專案開發中如果呼叫 API 時會 pass 給這個 proxy 網址，即後台網址
   proxy: process.env.VUE_APP_DEV_PROXY,
@@ -16,8 +18,12 @@ if (process.env.VUE_APP_DEV_HTTPS === "false") {
   delete devServer.https;
 }
 
+function resolve(dir) {
+  return path.join(__dirname, ".", dir);
+}
+
 module.exports = {
-  publicPath: "/",
+  publicPath: "./",
   // devServer: devServer,
   pages: {
     index: {
@@ -26,5 +32,33 @@ module.exports = {
       // 另外在 main.ts 的 router.beforeEach 可自定義網頁標題名稱
       title: process.env.VUE_APP_PROJECT_NAME,
     },
+  },
+  configureWebpack: {
+    module: {
+      rules: [
+        {
+          test: /\.svg$/,
+          use: ["svg-sprite-loader"],
+        },
+      ],
+    },
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
+    },
+  },
+  chainWebpack: (config) => {
+    config.module.rules.delete("svg");
+    config.module
+      .rule("svg-sprite-loader")
+      .test(/\.svg$/)
+      .include.add(resolve("src/main.ts"))
+      .end()
+      .use("svg-sprite-loader")
+      .loader("svg-sprite-loader")
+      .options({
+        symbolId: "[name]",
+      });
   },
 };
