@@ -17,7 +17,7 @@ if (process.env.VUE_APP_DEV_HTTPS === "false") {
 }
 
 module.exports = {
-  publicPath: "./",
+  publicPath: "/",
   // devServer: devServer,
   pages: {
     index: {
